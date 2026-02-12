@@ -3,11 +3,10 @@ FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
-# Instalamos herramientas de compilación si fueran necesarias
 RUN apt-get update && apt-get install -y --no-install-recommends gcc
 
-# Copiamos requirements e instalamos dependencias en una carpeta local
 COPY requirements.txt .
+# Instalamos dependencias
 RUN pip install --user --no-cache-dir -r requirements.txt
 
 
@@ -16,16 +15,16 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copiamos las librerías instaladas desde la fase anterior
+# Traemos las dependencias de la fase anterior
 COPY --from=builder /root/.local /root/.local
-# Copiamos el código de la aplicación y archivos necesarios
-COPY app.py bayeta.py frases.txt ./
 
-# Aseguramos que el PATH reconozca las librerías instaladas en la fase 1
+# CAMBIO AQUÍ: Copiamos TODOS los archivos .py y el .txt necesarios
+# Es mejor listar los archivos o usar un patrón para no olvidar ninguno
+COPY app.py bayeta.py database.py frases.txt ./
+
+# Aseguramos que el PATH reconozca las librerías (como pymongo)
 ENV PATH=/root/.local/bin:$PATH
 
-# Exponemos el puerto de Flask
 EXPOSE 5000
 
-# Comando para arrancar la app
 CMD ["python", "app.py"]
