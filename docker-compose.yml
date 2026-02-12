@@ -6,6 +6,9 @@ services:
       - bayeta-network
     ports:
       - "27017:27017"
+    volumes:
+      # Mapeamos el volumen nombrado 'mongo-data' a la ruta interna de Mongo
+      - mongo-data:/data/db
 
   bayeta-web:
     build: .
@@ -16,9 +19,14 @@ services:
       - bayeta-network
     ports:
       - "5000:5000"
+    # Opcional: pasar la URL de conexión como variable de entorno
     environment:
       - MONGO_URL=mongodb://mongo-db:27017/
 
 networks:
   bayeta-network:
     driver: bridge
+
+volumes:
+  # Definimos el volumen para que Docker lo gestione de forma persistente
+  mongo-data:
