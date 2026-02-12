@@ -1,0 +1,4 @@
+Hoy será un gran día para tu código.
+Un bug que no ves es un bug que te verá a ti.
+La bayeta dice que limpies el teclado.
+Tu commit será aceptado sin conflictos.
