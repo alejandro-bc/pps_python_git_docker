@@ -1,0 +1,24 @@
+services:
+  mongo-db:
+    image: mongo:latest
+    container_name: mongo-db
+    networks:
+      - bayeta-network
+    ports:
+      - "27017:27017"
+
+  bayeta-web:
+    build: .
+    container_name: bayeta-web
+    depends_on:
+      - mongo-db
+    networks:
+      - bayeta-network
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URL=mongodb://mongo-db:27017/
+
+networks:
+  bayeta-network:
+    driver: bridge
